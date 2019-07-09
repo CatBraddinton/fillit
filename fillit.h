@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fillit.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
+/*   By: kdudko <kdudko@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 17:05:11 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/05 17:05:18 by kdudko           ###   ########.fr       */
+/*   Updated: 2019/07/09 19:41:20 by kdudko           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,10 @@
 # include <fcntl.h>
 # include "libft/libft.h"
 
-# define BUFF_SIZE 21
+# define TETRO_SQUARE 20
 # define MAX_TETRI_NUM 26
 # define BLOCKS 4
+# define NL_POS 5
 
 typedef	struct		s_map
 {
@@ -34,9 +35,9 @@ typedef struct		s_tetr
 {
 	char			c;
 	int				indexes[BLOCKS];
-	int				all_fit[BLOCKS];
 	struct s_tetr	*next;
 	struct s_tetr	*prev;
+	int 			start;
 }					t_tetr;
 
 typedef struct		s_data
@@ -49,16 +50,30 @@ typedef struct		s_data
 	t_map			p_map;
 }					t_data;
 
-int					read_file(int fd, t_data *data);
+void				error_case(char const *str);
+int 				get_tetriminos_list(t_data *data);
+int					init_map_size(int nb);
+int					fillit(t_data *data, int map_size);
+
+void				create_map(char **map, int size, int len);
+void				init_new_map(t_map *map, int size);
+void				free_list(t_tetr **tetriminos);
+
+
+int 				validate_tetro(char const *tetro, int *indexes);
+int					count_indexes(int *indexes);
+
+
+
+
 void				add_to_list(char const *buffer,
 					t_data *init_data);
-void				free_list(t_tetr **tetriminos);
-void				error_case(char const *str);
-int					fillit(t_data *data, int map_size);
-t_data				init_new_data(void);
-t_map				init_new_map(int list_size);
-int					change_map_state(t_map *map, int *indexes, char c);
+
+
+
+
+int				change_map_state(char **map, t_data *data, char state);
 void				arr_zero(int **arr);
-int					init_map_size(int nb);
+
 
 #endif

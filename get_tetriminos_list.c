@@ -6,6 +6,7 @@ static int add_tetro_to_list(char const *buf, t_data *data)
 	t_tetr *last_node;
 
 	figure = (t_tetr *)malloc(sizeof(t_tetr));
+	last_node = NULL;
 	if (figure == NULL)
 		return (-1);
 	if (data->head == NULL)
@@ -47,6 +48,7 @@ static int	read_file(int fd, t_data *data)
 		data->temp++;
 	if ((add_tetro_to_list(buf, data)) == -1)
 		return (-1);
+	ft_strdel(&buf);
 	return (read_file(fd, data));
 }
 

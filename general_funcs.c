@@ -6,7 +6,7 @@
 /*   By: kdudko <kdudko@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 17:06:58 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/09 09:00:30 by kdudko           ###   ########.fr       */
+/*   Updated: 2019/07/09 20:50:36 by kdudko           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	free_list(t_tetr **tetriminos)
 {
 	t_tetr *node;
 
+	node = NULL;
 	if ((*tetriminos) && tetriminos)
 	{
 		node = (*tetriminos);
