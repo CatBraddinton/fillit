@@ -1,8 +1,10 @@
+.DS_Store
 main.o 
 map.o 
-add_to_list.o 
 solver.o
-inits_and_frees.o
+general_funcs.o
+get_tetriminos_list.o
+validate_tetriminos.o
 fillit
 fillit_termux
 fillit_debug
