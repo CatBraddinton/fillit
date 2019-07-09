@@ -6,7 +6,7 @@
 /*   By: kdudko <kdudko@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 18:22:07 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/09 21:13:59 by kdudko           ###   ########.fr       */
+/*   Updated: 2019/07/09 21:30:07 by kdudko           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,21 @@ int			init_map_size(int nb)
 void	create_map(char **map, int size, int len)
 {
 	int	nl;
+	int i;
 
+	i = 0;
 	nl = size;
-	ft_memset((*map), '.', len);
-	while (nl < len)
+	while (i < len)
 	{
-		(*map)[nl] = '\n';
-		nl += size + 1;
+		if (i == nl)
+		{
+			(*map)[i] = '\n';
+			nl += size + 1;
+		}
+		else
+			(*map)[i] = '.';
+		i++;
 	}
-	(*map)[len - 1] = '\n';
 }
 
 void		init_new_map(t_map *map, int size)

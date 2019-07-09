@@ -6,14 +6,13 @@ static int add_tetro_to_list(char const *buf, t_data *data)
 	t_tetr *last_node;
 
 	figure = (t_tetr *)malloc(sizeof(t_tetr));
-	last_node = NULL;
+	last_node = data->current;
 	if (figure == NULL)
 		return (-1);
 	if (data->head == NULL)
 		data->head = figure;
 	else if (data->head)
 	{
-		last_node = data->current;
 		figure->prev = last_node;
 		last_node->next = figure;
 	}
@@ -55,7 +54,11 @@ static int	read_file(int fd, t_data *data)
 int			get_tetriminos_list(t_data *data)
 {
 	int		fd;
+	t_tetr	*tetriminos;
 
+	tetriminos = NULL;
+	data->head = tetriminos;
+	data->current = tetriminos;
 	if ((fd = open("valid_18",  O_RDONLY)) == -1)
 		error_case("error");
 	if ((read_file(fd, data)) == -1)

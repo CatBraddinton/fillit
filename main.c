@@ -6,7 +6,7 @@
 /*   By: kdudko <kdudko@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 17:05:34 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/09 20:53:30 by kdudko           ###   ########.fr       */
+/*   Updated: 2019/07/09 21:24:06 by kdudko           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 int	main(int ac, char **av)
 {
-	t_tetr	*tetriminos;
 	t_data	data;
 
-	tetriminos = NULL;
 	if (ac != 1 || !av[0])
 		error_case("usage: ./fillit filename");
-	data.head = tetriminos;
+	data.head = NULL;
+	data.current = NULL;
 	data.list_size = 0;
 	data.curr_c = 'A';
 	data.temp = 0;
