@@ -13,27 +13,21 @@
 NAME = libft.a
 LINUX_LIB = libft.so
 INCLUDES := $(wildcard *.h)
-
 FLAGS = -Wall -Wextra -Werror
-
 SRC := $(wildcard *.c)
-
 OBJ := $(SRC:.c=.o)
 
 all: $(NAME)
-
-term: $(LINUX_LIB)
+termux: $(LINUX_LIB)
 
 $(NAME): $(SRC) $(INCLUDES) $(OBJ)
 	ar rc $(NAME) $(OBJ)
 	ranlib $(NAME)
-
 $(LINUX_LIB):$(SRC) $(OBJ)
 	gcc -shared -o $(LINUX_LIB) $(OBJ)
-	
-
 $(OBJ): $(SRC)
 	gcc $(FLAGS) -c $(SRC) -I $(INCLUDES)
+
 clean:
 	rm -rf $(OBJ) $(LINUX_LIB)
 
