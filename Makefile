@@ -1,10 +1,10 @@
 NAME := fillit
 INCLUDES := fillit.h
 FLAGS = -Wall -Wextra -Werror
-SRC = 	main.c map.c add_to_list.c solver.c \
-	 	inits_and_frees.c
-OBJ := 	main.o map.o add_to_list.o solver.o\
-		inits_and_frees.o
+SRC = 	main.c get_tetriminos_list.c general_funcs.c\
+		validate_tetriminos.c map.c solver.c
+OBJ := 	main.o get_tetriminos_list.o general_funcs.o\
+		validate_tetriminos.o map.o solver.o
 LIB := libft/libft.a
 
 
