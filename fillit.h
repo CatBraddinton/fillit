@@ -1,20 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   fillit.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/11 08:06:01 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/11 08:08:15 by kdudko           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef FILLIT_H
 # define FILLIT_H
 
 # include <fcntl.h>
-# include "libft/libft.h"
+# include <stdlib.h>
+# include <unistd.h>
+# include <string.h>
 
 # define TETRO_SQUARE 20
 # define MAX_TETRI_NUM 26

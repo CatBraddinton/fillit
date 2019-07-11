@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   solver.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/11 08:17:06 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/11 08:21:52 by kdudko           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "fillit.h"
 
 static int	check_if_valid(t_data *data, int *indexes, char *map, int size)
@@ -72,19 +60,22 @@ static int	find_correct_pattern(t_data *data, int len)
 int			fillit(t_data *data, int map_size)
 {
 	int		map_len;
+	int		i;
 
+	i = 0;
 	data->current = data->head;
 	data->current->start = 0;
 	data->map_size = map_size;
 	map_len = map_size * map_size + map_size;
-	data->map = ft_strnew(map_len);
+	data->map = (char *)malloc((map_len + 1) * sizeof(char));
 	create_map(data->map, map_size, map_len, data->map_char);
 	if (find_correct_pattern(data, map_len))
 	{
-		ft_putstr(data->map);
+		while (data->map[i])
+			write(1, &data->map[i++], 1);
 		return (1);
 	}
-	ft_strdel(&(data->map));
+	free(data->map);
 	data->map = NULL;
 	return (fillit(data, data->map_size + 1));
 }

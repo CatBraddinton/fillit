@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   map.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/11 08:12:09 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/11 08:14:19 by kdudko           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "fillit.h"
 
 int		min_map_size(int nb)
@@ -51,12 +39,20 @@ int		change_map_state(char *map, t_tetr *node, char state, int size)
 void	create_map(char *map, int size, int len, char map_char)
 {
 	int	nl_char;
+	int i;
 
+	i = 0;
 	nl_char = size;
-	ft_memset(map, map_char, len - 1);
-	while (nl_char < len)
+	while (i < len)
 	{
-		map[nl_char] = '\n';
-		nl_char += size + 1;
+		map[i] = map_char;
+		if (i == nl_char)
+		{
+			map[nl_char] = '\n';
+			nl_char += size + 1;
+		}
+		i++;
 	}
+	if (i == len)
+		map[len] = '\0';
 }

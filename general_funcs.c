@@ -1,20 +1,13 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   general_funcs.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/11 08:09:25 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/11 08:09:54 by kdudko           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "fillit.h"
 
 void	error_case(char const *str)
 {
-	ft_putendl_fd(str, 1);
+	int i;
+
+	i = 0;
+	while (str[i])
+		write(1, &str[i++], 1);
+	write(1, "\n", 1);
 	exit(EXIT_FAILURE);
 }
 
