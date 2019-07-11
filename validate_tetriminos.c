@@ -1,6 +1,6 @@
 #include "fillit.h"
 
-int		check_connections(char const *buffer, int *indexes)
+static int		check_connections(char const *buffer, int *indexes)
 {
 	int block;
 	int conn;
@@ -26,7 +26,7 @@ int		check_connections(char const *buffer, int *indexes)
 	return (1);
 }
 
-int		check_blocks(char const *buffer, int *indexes)
+static int	check_blocks(char const *buffer, int *indexes)
 {
 	int i;
 	int block;
@@ -48,7 +48,7 @@ int		check_blocks(char const *buffer, int *indexes)
 	return (1);
 }
 
-int		nl_check(char const *buffer)
+static int	nl_check(char const *buffer)
 {
 	int i;
 	int nl;
@@ -72,7 +72,7 @@ int		nl_check(char const *buffer)
 	return (1);
 }
 
-int validate_tetro(char const *buf, int *indexes)
+int 		validate_tetro(char const *buf, int *indexes)
 {
 	if ((nl_check(buf)) == -1)
 		return (-1);

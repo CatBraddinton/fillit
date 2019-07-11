@@ -1,25 +1,43 @@
 #include "fillit.h"
 
+static int	count_indexes(int *indexes)
+{
+	int i;
+
+	i = BLOCKS - 1;
+	while (i > 0)
+	{
+		indexes[i] -= indexes[i - 1];
+		i--;
+	}
+	if (i == 0)
+	{
+		indexes[i] = 0;
+		return (1);
+	}
+	return (-1);
+}
+
 static int add_tetro_to_list(char const *buf, t_data *data)
 {
 	t_tetr *figure;
 	t_tetr *last_node;
 
 	figure = (t_tetr *)malloc(sizeof(t_tetr));
-	last_node = data->current;
 	if (figure == NULL)
 		return (-1);
 	if (data->head == NULL)
 		data->head = figure;
 	else if (data->head)
 	{
+		last_node = data->current;
 		figure->prev = last_node;
 		last_node->next = figure;
 	}
 	figure->next = NULL;
 	data->list_size++;
-	figure->c = data->curr_c;
-	data->curr_c++;
+	figure->c = data->tetr_char;
+	data->tetr_char++;
 	data->current = figure;
 	if ((validate_tetro(buf, figure->indexes)) == -1 ||
 		(count_indexes(figure->indexes)) == -1)
@@ -36,7 +54,7 @@ static int	read_file(int fd, t_data *data)
 	ret = read(fd, buf, (TETRO_SQUARE + 1));
 	if (ret == 0)
 	{
-		if (data->temp == data->list_size)
+		if (data->temp2 == data->list_size)
 			error_case("error");
 		return (1);
 	}
@@ -44,7 +62,7 @@ static int	read_file(int fd, t_data *data)
 		|| (buf[TETRO_SQUARE - 1] != '\n'))
 		error_case("error");
 	if (ret == TETRO_SQUARE + 1 && buf[ret - 1] == '\n')
-		data->temp++;
+		data->temp2++;
 	if ((add_tetro_to_list(buf, data)) == -1)
 		return (-1);
 	ft_strdel(&buf);

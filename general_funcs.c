@@ -6,7 +6,7 @@
 /*   By: kdudko <kdudko@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 17:06:58 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/09 21:24:25 by kdudko           ###   ########.fr       */
+/*   Updated: 2019/07/11 03:01:04 by kdudko           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,11 @@ void	free_list(t_tetr **tetriminos)
 	}
 }
 
-int		count_indexes(int *indexes)
+void	init_current_data(t_data *data)
 {
-	int i;
-
-	i = BLOCKS - 1;
-	while (i > 0)
-	{
-		indexes[i] -= indexes[i - 1];
-		i--;
-	}
-	if (i == 0)
-	{
-		indexes[i] = 0;
-		return (1);
-	}
-	return (-1);
+	data->list_size = 0;
+	data->map_size = 0;
+	data->map_char = '.';
+	data->map_size = 0;
+	data->tetr_char = 'A';	
 }
