@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_tetriminos_list.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
+/*   By: kdudko <kdudko@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 08:10:23 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/11 08:11:42 by kdudko           ###   ########.fr       */
+/*   Updated: 2019/07/11 19:12:18 by kdudko           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static void	add_tetro_to_list(t_data *data, int *current_indexes)
 	figure->c = data->tetr_char;
 	data->tetr_char++;
 	data->current = figure;
+	data->current->start = 0;
 	count_indexes(figure->indexes, current_indexes);
 }
 

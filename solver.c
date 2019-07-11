@@ -9,7 +9,7 @@ static int	check_if_valid(t_data *data, int *indexes, char *map, int size)
 
 	i = data->current->start;
 	block = 0;
-	m_len = (size * size) + size + 1;
+	m_len = (size * size) + size;
 	while (block < BLOCKS)
 	{
 		next = indexes[block];
@@ -23,38 +23,43 @@ static int	check_if_valid(t_data *data, int *indexes, char *map, int size)
 		if ((i >= 0) && (i < m_len) && map[i] == '.')
 			block++;
 		else if ((i >= m_len) || ((i >= 0) && (i < m_len) && map[i] != '.'))
-			return (-1);
+			return (0);
 	}
 	return (1);
 }
 
 static int	find_correct_pattern(t_data *data, int len)
 {
-	while ((data->current) && (data->current->start < len - 2))
+	while (data->current)
 	{
-		if ((check_if_valid(data, data->current->indexes,
-							data->map, data->map_size) == 1)
-			&& (change_map_state(data->map, data->current,
-								data->current->c, data->map_size)) == 1)
+		if ((data->current->start < len) &&
+			check_if_valid(data, data->current->indexes,
+							data->map, data->map_size))
 		{
+			change_map_state(data->map, data->current,
+								data->current->c, data->map_size);
 			if (data->current->next == NULL)
 				return (1);
 			data->current = data->current->next;
 			data->current->start = 0;
+			return (find_correct_pattern(data, len));
+		}
+		else if (data->current->start >= len)
+		{
+			if (data->current->prev)
+			{
+				data->current = data->current->prev;
+				change_map_state(data->map, data->current,
+								data->map_char, data->map_size);
+				data->current->start++;
+			}
+			if (!data->current->prev)
+				return (0);
 		}
 		else
 			data->current->start++;
 	}
-	if (data->current->start >= len - 2 && data->current->prev)
-	{
-		data->current = data->current->prev;
-		change_map_state(data->map, data->current,
-						data->map_char, data->map_size);
-		data->current->start++;
-	}
-	else if (!data->current->prev)
-		return (0);
-	return (find_correct_pattern(data, len));
+	return (0);
 }
 
 int			fillit(t_data *data, int map_size)
