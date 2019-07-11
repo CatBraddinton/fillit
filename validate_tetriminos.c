@@ -1,84 +1,70 @@
 #include "fillit.h"
 
-static int		check_connections(char const *buffer, int *indexes)
+static int		check_connections(char const *buffer, int i)
 {
-	int block;
-	int conn;
-	int i;
+	int neighbour;
 
-	block = 0;
-	conn = 0;
-	while (block < BLOCKS)
-	{
-		i = indexes[block];
-		if (buffer[i + 1] == '#')
-			conn++;
-		if (buffer[i + 5] == '#')
-			conn++;
-		if (buffer[i - 1] == '#')
-			conn++;
-		if (buffer[i - 5] == '#')
-			conn++;
-		block++;
-	}
-	if (conn < 6)
-		return (-1);
-	return (1);
+	neighbour = 0;
+	if (buffer[i + 1] == '#')
+			neighbour++;
+	if (buffer[i + 5] == '#')
+			neighbour++;
+	if (buffer[i - 1] == '#')
+			neighbour++;
+	if (buffer[i - 5] == '#')
+			neighbour++;
+	return (neighbour);
 }
 
-static int	check_blocks(char const *buffer, int *indexes)
+void	verify_tetrimino_is_valid(char const *buf, int *initial_indexes)
 {
 	int i;
 	int block;
+	int connections;
 
 	i = 0;
 	block = 0;
-	arr_zero(&indexes);
-	while (i < TETRO_SQUARE)
+	connections = 0;
+	arr_zero(initial_indexes);
+	while (buf[i])
 	{
-		if (buffer[i] == '#')
+		if (buf[i] == '#')
 		{
-			indexes[block] = i;
+			initial_indexes[block] = i;
+			connections += check_connections(buf, i);
 			block++;
-			if (block > BLOCKS)
-				return (-1);
 		}
 		i++;
 	}
-	return (1);
+	if (connections < 6)
+		error_case("error");
 }
 
-static int	nl_check(char const *buffer)
+void	first_check_nl_blocks(char const *buf)
 {
 	int i;
 	int nl;
 	int temp;
+	int block;
 
-	nl = 0;
 	i = 0;
-	while (i < TETRO_SQUARE)
+	nl = 0;
+	block = 0;	
+	while (buf[i] != '\0')
 	{
-		if ((buffer[i] != '\n') && (buffer[i] != '#') && (buffer[i] != '.'))
-			return (-1);
-		if (buffer[i] == '\n')
+		if ((buf[i] != '\n') && (buf[i] != '#') && (buf[i] != '.'))
+			error_case("error");
+		if (buf[i] == '\n')
 		{
 			nl++;
 			temp = nl * NL_POS - 1;
-			if (i != temp)
-				return (-1);
+			if (temp < TETRO_SQUARE && i != temp)
+				error_case("error");
 		}
+		if (buf[i] == '#')
+			block++;
 		i++;
 	}
-	return (1);
-}
-
-int 		validate_tetro(char const *buf, int *indexes)
-{
-	if ((nl_check(buf)) == -1)
-		return (-1);
-	if ((check_blocks(buf, indexes)) == -1)
-		return (-1);
-	if ((check_connections(buf, indexes)) == -1)
-		return (-1);
-	return (1);
+	if (block != BLOCKS)
+		error_case("error");
 }

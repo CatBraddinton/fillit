@@ -6,7 +6,7 @@
 /*   By: kdudko <kdudko@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 17:06:58 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/11 03:01:04 by kdudko           ###   ########.fr       */
+/*   Updated: 2019/07/11 07:29:35 by kdudko           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@ void	error_case(char const *str)
 	exit(EXIT_FAILURE);
 }
 
-void	arr_zero(int **arr)
+void	arr_zero(int *arr)
 {
 	int block;
 
 	block = 0;
 	while (block < BLOCKS)
 	{
-		(*arr)[block] = 0;
+		arr[block] = 0;
 		block++;
 	}
 }

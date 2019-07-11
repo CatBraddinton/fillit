@@ -1,33 +1,30 @@
 #include "fillit.h"
 
-static int	count_indexes(int *indexes)
+static void	count_indexes(int *indexes, int *current_indexes)
 {
-	int i;
+	int block;
 
-	i = BLOCKS - 1;
-	while (i > 0)
+	block = 1;
+	arr_zero(indexes);
+	while (block < BLOCKS)
 	{
-		indexes[i] -= indexes[i - 1];
-		i--;
+		indexes[block] = current_indexes[block] - current_indexes[block - 1];
+		block++;
 	}
-	if (i == 0)
-	{
-		indexes[i] = 0;
-		return (1);
-	}
-	return (-1);
 }
 
-static int add_tetro_to_list(char const *buf, t_data *data)
+static void add_tetro_to_list(t_data *data, int *current_indexes)
 {
 	t_tetr *figure;
 	t_tetr *last_node;
 
-	figure = (t_tetr *)malloc(sizeof(t_tetr));
-	if (figure == NULL)
-		return (-1);
+	if ((figure = (t_tetr *)malloc(sizeof(t_tetr))) == NULL)
+		error_case("error");
 	if (data->head == NULL)
+	{
 		data->head = figure;
+		figure->prev = NULL;
+	}
 	else if (data->head)
 	{
 		last_node = data->current;
@@ -39,37 +36,38 @@ static int add_tetro_to_list(char const *buf, t_data *data)
 	figure->c = data->tetr_char;
 	data->tetr_char++;
 	data->current = figure;
-	if ((validate_tetro(buf, figure->indexes)) == -1 ||
-		(count_indexes(figure->indexes)) == -1)
-		return (-1);
-	return (1);
+	count_indexes(figure->indexes, current_indexes);
 }
 
 static int	read_file(int fd, t_data *data)
 {
-	char	*buf;
+	char	buf[TETRO_SQUARE + 2];
 	int		ret;
-	
-	buf = ft_strnew(TETRO_SQUARE + 1);
+	int 	current_indexes[BLOCKS];
+
 	ret = read(fd, buf, (TETRO_SQUARE + 1));
+	buf[ret] = '\0';
 	if (ret == 0)
 	{
-		if (data->temp2 == data->list_size)
+		if (data->temp == data->list_size)
 			error_case("error");
 		return (1);
 	}
-	if ((data->list_size == MAX_TETRI_NUM) || (ret == -1) 
-		|| (buf[TETRO_SQUARE - 1] != '\n'))
+	if (ret == -1)
+		return (-1);
+	if (data->list_size == MAX_TETRI_NUM)
+		error_case("error");
+	if (buf[TETRO_SQUARE - 1] != '\n')
 		error_case("error");
 	if (ret == TETRO_SQUARE + 1 && buf[ret - 1] == '\n')
-		data->temp2++;
-	if ((add_tetro_to_list(buf, data)) == -1)
-		return (-1);
-	ft_strdel(&buf);
+		data->temp++;
+	first_check_nl_blocks(buf);
+	verify_tetrimino_is_valid(buf, current_indexes);
+	add_tetro_to_list(data, current_indexes);
 	return (read_file(fd, data));
 }
 
-int			get_tetriminos_list(t_data *data)
+int			get_tetriminos_list(t_data *data, char *filename)
 {
 	int		fd;
 	t_tetr	*tetriminos;
@@ -77,10 +75,10 @@ int			get_tetriminos_list(t_data *data)
 	tetriminos = NULL;
 	data->head = tetriminos;
 	data->current = tetriminos;
-	if ((fd = open("valid_18",  O_RDONLY)) == -1)
+	if ((fd = open(filename,  O_RDONLY)) == -1)
 		error_case("error");
 	if ((read_file(fd, data)) == -1)
-		return (-1);
+		error_case("error");
 	close(fd);
 	return (1);
 }
