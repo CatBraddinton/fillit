@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_tetriminos_list.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/07/11 08:10:23 by kdudko            #+#    #+#             */
+/*   Updated: 2019/07/11 08:11:42 by kdudko           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fillit.h"
 
 static void	count_indexes(int *indexes, int *current_indexes)
@@ -13,7 +25,7 @@ static void	count_indexes(int *indexes, int *current_indexes)
 	}
 }
 
-static void add_tetro_to_list(t_data *data, int *current_indexes)
+static void	add_tetro_to_list(t_data *data, int *current_indexes)
 {
 	t_tetr *figure;
 	t_tetr *last_node;
@@ -43,7 +55,7 @@ static int	read_file(int fd, t_data *data)
 {
 	char	buf[TETRO_SQUARE + 2];
 	int		ret;
-	int 	current_indexes[BLOCKS];
+	int		current_indexes[BLOCKS];
 
 	ret = read(fd, buf, (TETRO_SQUARE + 1));
 	buf[ret] = '\0';
@@ -75,7 +87,7 @@ int			get_tetriminos_list(t_data *data, char *filename)
 	tetriminos = NULL;
 	data->head = tetriminos;
 	data->current = tetriminos;
-	if ((fd = open(filename,  O_RDONLY)) == -1)
+	if ((fd = open(filename, O_RDONLY)) == -1)
 		error_case("error");
 	if ((read_file(fd, data)) == -1)
 		error_case("error");

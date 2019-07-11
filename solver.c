@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   solver.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/07/11 08:17:06 by kdudko            #+#    #+#             */
+/*   Updated: 2019/07/11 08:21:52 by kdudko           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fillit.h"
 
-static int check_if_valid(t_data *data, int *indexes, char *map, int size)
+static int	check_if_valid(t_data *data, int *indexes, char *map, int size)
 {
 	int block;
 	int next;
@@ -28,12 +40,14 @@ static int check_if_valid(t_data *data, int *indexes, char *map, int size)
 	return (1);
 }
 
-static int find_correct_pattern(t_data *data, int len)
+static int	find_correct_pattern(t_data *data, int len)
 {
 	while ((data->current) && (data->current->start < len - 2))
-	{	 
-		if ((check_if_valid(data, data->current->indexes, data->map, data->map_size) == 1)
-			&& (change_map_state(data->map, data->current, data->current->c, data->map_size)) == 1)
+	{
+		if ((check_if_valid(data, data->current->indexes,
+							data->map, data->map_size) == 1)
+			&& (change_map_state(data->map, data->current,
+								data->current->c, data->map_size)) == 1)
 		{
 			if (data->current->next == NULL)
 				return (1);
@@ -42,12 +56,12 @@ static int find_correct_pattern(t_data *data, int len)
 		}
 		else
 			data->current->start++;
-		
 	}
 	if (data->current->start >= len - 2 && data->current->prev)
 	{
 		data->current = data->current->prev;
-		change_map_state(data->map, data->current, data->map_char, data->map_size);
+		change_map_state(data->map, data->current,
+						data->map_char, data->map_size);
 		data->current->start++;
 	}
 	else if (!data->current->prev)
@@ -55,7 +69,7 @@ static int find_correct_pattern(t_data *data, int len)
 	return (find_correct_pattern(data, len));
 }
 
-int 		fillit(t_data *data, int map_size)
+int			fillit(t_data *data, int map_size)
 {
 	int		map_len;
 

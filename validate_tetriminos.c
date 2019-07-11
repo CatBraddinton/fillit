@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validate_tetriminos.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/07/11 08:14:59 by kdudko            #+#    #+#             */
+/*   Updated: 2019/07/11 08:16:29 by kdudko           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fillit.h"
 
 static int		check_connections(char const *buffer, int i)
@@ -6,17 +18,17 @@ static int		check_connections(char const *buffer, int i)
 
 	neighbour = 0;
 	if (buffer[i + 1] == '#')
-			neighbour++;
+		neighbour++;
 	if (buffer[i + 5] == '#')
-			neighbour++;
+		neighbour++;
 	if (buffer[i - 1] == '#')
-			neighbour++;
+		neighbour++;
 	if (buffer[i - 5] == '#')
-			neighbour++;
+		neighbour++;
 	return (neighbour);
 }
 
-void	verify_tetrimino_is_valid(char const *buf, int *initial_indexes)
+void			verify_tetrimino_is_valid(char const *buf, int *initial_indexes)
 {
 	int i;
 	int block;
@@ -40,7 +52,7 @@ void	verify_tetrimino_is_valid(char const *buf, int *initial_indexes)
 		error_case("error");
 }
 
-void	first_check_nl_blocks(char const *buf)
+void			first_check_nl_blocks(char const *buf)
 {
 	int i;
 	int nl;
@@ -49,7 +61,7 @@ void	first_check_nl_blocks(char const *buf)
 
 	i = 0;
 	nl = 0;
-	block = 0;	
+	block = 0;
 	while (buf[i] != '\0')
 	{
 		if ((buf[i] != '\n') && (buf[i] != '#') && (buf[i] != '.'))

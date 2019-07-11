@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   general_funcs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kdudko <kdudko@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/05 17:06:58 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/11 07:29:35 by kdudko           ###   ########.fr       */
+/*   Created: 2019/07/11 08:09:25 by kdudko            #+#    #+#             */
+/*   Updated: 2019/07/11 08:09:54 by kdudko           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,5 @@ void	init_current_data(t_data *data)
 	data->map_size = 0;
 	data->map_char = '.';
 	data->map_size = 0;
-	data->tetr_char = 'A';	
+	data->tetr_char = 'A';
 }

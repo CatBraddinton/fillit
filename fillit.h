@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fillit.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kdudko <kdudko@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/05 17:05:11 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/11 07:41:26 by kdudko           ###   ########.fr       */
+/*   Created: 2019/07/11 08:06:01 by kdudko            #+#    #+#             */
+/*   Updated: 2019/07/11 08:08:15 by kdudko           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct		s_tetr
 	int				indexes[BLOCKS];
 	struct s_tetr	*next;
 	struct s_tetr	*prev;
-	int 			start;
+	int				start;
 }					t_tetr;
 
 typedef struct		s_data
@@ -35,11 +35,11 @@ typedef struct		s_data
 	t_tetr			*head;
 	t_tetr			*current;
 	int				list_size;
-	int 			map_size;
+	int				map_size;
 	char			map_char;
 	char			tetr_char;
-	int 			temp;
-	char 			*map;
+	int				temp;
+	char			*map;
 }					t_data;
 
 void				error_case(char const *str);
@@ -47,7 +47,7 @@ void				arr_zero(int *arr);
 void				init_current_data(t_data *data);
 void				free_list(t_tetr **tetriminos);
 
-int 				get_tetriminos_list(t_data *data, char *filename);
+int					get_tetriminos_list(t_data *data, char *filename);
 void				first_check_nl_blocks(char const *buf);
 void				verify_tetrimino_is_valid(char const *buf, int *indexes);
 
@@ -58,7 +58,5 @@ int					change_map_state(char *map, t_tetr *node, char state,
 void				create_map(char *map, int size, int len, char map_char);
 
 int					fillit(t_data *data, int map_size);
-
-
 
 #endif
