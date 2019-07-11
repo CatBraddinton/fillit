@@ -5,7 +5,7 @@ int	main(int ac, char **av)
 	t_data	data;
 
 	if (ac != 2)
-		error_case("usage: ./fillit filename");
+		error_case("usage: ./fillit [file_name]");
 	init_current_data(&data);
 	get_tetriminos_list(&data, av[1]);
 	data.map_size = min_map_size(data.list_size);
