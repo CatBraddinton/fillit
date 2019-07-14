@@ -1,6 +1,6 @@
 #include "fillit.h"
 
-int		min_map_size(int nb)
+int	min_map_size(int nb)
 {
 	int size;
 	int total_nb;
@@ -12,47 +12,45 @@ int		min_map_size(int nb)
 	return (size);
 }
 
-int		change_map_state(char *map, t_tetr *node, char state, int size)
+int	create_map(t_map *st_map, int size, char c)
 {
-	int block;
-	int p;
-	int next;
+	int i;
+	int j;
 
-	block = 0;
-	p = node->start;
-	while (block < BLOCKS)
+	i = 0;
+	st_map->map_size = size;
+	if ((st_map->map = (char **)malloc(size * sizeof(char *))) == NULL)
+		return (0);
+	while (i < size)
 	{
-		next = node->indexes[block];
-		if (node->indexes[block] == 4)
-			next = size;
-		else if (node->indexes[block] == 5)
-			next = size + 1;
-		else if (node->indexes[block] == 3)
-			next = size - 1;
-		p += next;
-		map[p] = state;
-		block++;
+		j = 0;
+		st_map->map[i] = (char *)malloc((size + 1) * sizeof(char));
+		if (st_map->map[i] == NULL)
+			return (0);
+		while (j < size)
+		{
+			st_map->map[i][j] = c;
+			j++;
+		}
+		st_map->map[i][j] = '\0';
+		i++;
 	}
 	return (1);
 }
 
-void	create_map(char *map, int size, int len, char map_char)
+int	change_map_state(t_tetr *tetro, t_map *st_map, char state)
 {
-	int	nl_char;
-	int i;
+	int y;
+	int x;
+	int block;
 
-	i = 0;
-	nl_char = size;
-	while (i < len)
+	block = 0;
+	while (block < BLOCKS)
 	{
-		map[i] = map_char;
-		if (i == nl_char)
-		{
-			map[nl_char] = '\n';
-			nl_char += size + 1;
-		}
-		i++;
+		y = tetro->fin_xy[block].y;
+		x = tetro->fin_xy[block].x;
+		st_map->map[y][x] = state;
+		block++;
 	}
-	if (i == len)
-		map[len] = '\0';
+	return (1);
 }

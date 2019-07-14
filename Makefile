@@ -3,20 +3,20 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+         #
+#    By: kdudko <kdudko@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/11 13:14:43 by kdudko            #+#    #+#              #
-#    Updated: 2019/07/11 13:14:47 by kdudko           ###   ########.fr        #
+#    Updated: 2019/07/14 23:58:19 by kdudko           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := fillit
 INCLUDES := fillit.h
 FLAGS = -Wall -Wextra -Werror
-SRC = 	main.c get_tetriminos_list.c general_funcs.c\
-		validate_tetriminos.c map.c solver.c
-OBJ := 	main.o get_tetriminos_list.o general_funcs.o\
-		validate_tetriminos.o map.o solver.o
+SRC = 	main.c get_tetriminos_list.c validate_tetriminos.c general_funcs.c\
+		map.c fillit.c
+OBJ := 	main.o get_tetriminos_list.o validate_tetriminos.o general_funcs.o\
+		map.o fillit.o
 
 all: $(NAME)
 

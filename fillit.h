@@ -11,13 +11,26 @@
 # define BLOCKS 4
 # define NL_POS 5
 
+typedef struct 		s_indexes
+{
+	int 			x;
+	int 			y;
+}					t_indexes;
+
+typedef struct 		s_map
+{
+	char 			**map;
+	int 			map_size;
+	char 			map_char;
+}					t_map;
+
 typedef struct		s_tetr
 {
 	char			c;
-	int				indexes[BLOCKS];
 	struct s_tetr	*next;
 	struct s_tetr	*prev;
-	int				start;
+	t_indexes		x_y[BLOCKS];
+	t_indexes		fin_xy[BLOCKS];
 }					t_tetr;
 
 typedef struct		s_data
@@ -25,16 +38,12 @@ typedef struct		s_data
 	t_tetr			*head;
 	t_tetr			*current;
 	int				list_size;
-	int				map_size;
-	char			map_char;
 	char			tetr_char;
-	int				temp;
-	char			*map;
+	int 			has_nl;
 }					t_data;
 
 void				error_case(char const *str);
 void				arr_zero(int *arr);
-void				init_current_data(t_data *data);
 void				free_list(t_tetr **tetriminos);
 
 int					get_tetriminos_list(t_data *data, char *filename);
@@ -42,11 +51,11 @@ void				first_check_nl_blocks(char const *buf);
 void				verify_tetrimino_is_valid(char const *buf, int *indexes);
 
 int					min_map_size(int nb);
+int					fillit(t_tetr *head, t_map *st_map, int map_size);
 
-int					change_map_state(char *map, t_tetr *node, char state,
-					int size);
-void				create_map(char *map, int size, int len, char map_char);
-
-int					fillit(t_data *data, int map_size);
+int					create_map(t_map *st_map, int size, char c);
+void				print_map(t_map *st_map);
+int					change_map_state(t_tetr *tetro, t_map *st_map, char state);
+void				free_map(t_map *st_map);
 
 #endif

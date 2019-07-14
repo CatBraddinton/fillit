@@ -1,60 +1,68 @@
 #include "fillit.h"
+#include <stdio.h>
 
-static int	check_if_valid(t_data *data, int *indexes, char *map, int size)
+static int	find_empty_point(char *map, int i)
+{
+	while (map[i] != '\0' && map[i] != '.')
+		i++;
+	return (i);
+}
+
+static int	put_tetro_on_map(t_data *data, int *indexes, int len, int i)
 {
 	int block;
 	int next;
-	int i;
-	int m_len;
 
-	i = data->current->start;
 	block = 0;
-	m_len = (size * size) + size + 1;
 	while (block < BLOCKS)
 	{
 		next = indexes[block];
 		if (next == 4)
-			next = size;
+			next = data->map_size;
 		else if (next == 5)
-			next = size + 1;
+			next = data->map_size + 1;
 		else if (next == 3)
-			next = size - 1;
+			next = data->map_size - 1;
 		i += next;
-		if ((i >= 0) && (i < m_len) && map[i] == '.')
+		if ((i >= 0) && (i < len) && data->map[i] == '.')
 			block++;
-		else if ((i >= m_len) || ((i >= 0) && (i < m_len) && map[i] != '.'))
-			return (-1);
+		else if ((i >= len) || ((i >= 0) && (i < len) && data->map[i] != '.'))
+			return (0);
 	}
-	return (1);
+	if (block == BLOCKS)
+		return (1);
+	return (0);
 }
 
 static int	find_correct_pattern(t_data *data, int len)
 {
-	while ((data->current) && (data->current->start < len - 2))
+	int empty;
+
+	while (data->current)
 	{
-		if ((check_if_valid(data, data->current->indexes,
-							data->map, data->map_size) == 1)
-			&& (change_map_state(data->map, data->current,
-								data->current->c, data->map_size)) == 1)
+		empty = find_empty_point(data->map, data->current->start);
+		while (empty >= 0 && empty < len)
 		{
-			if (data->current->next == NULL)
-				return (1);
-			data->current = data->current->next;
-			data->current->start = 0;
+			if (put_tetro_on_map(data, data->current->indexes,len, empty))
+			{
+				data->current->start = empty;
+				change_map_state(data->map, data->current, data->current->c, data->map_size);
+				data->current = data->current->next;
+				if (data->current)
+					data->current->start = 0;
+				break ;
+			}
+			empty++;
 		}
-		else
+		if (empty >= len)
+		{
+			if (data->current->prev == NULL)
+				return (0);
+			data->current = data->current->prev;
 			data->current->start++;
+		}
 	}
-	if (data->current->start >= len - 2 && data->current->prev)
-	{
-		data->current = data->current->prev;
-		change_map_state(data->map, data->current,
-						data->map_char, data->map_size);
-		data->current->start++;
-	}
-	else if (!data->current->prev)
-		return (0);
-	return (find_correct_pattern(data, len));
+	return (1);
 }
 
 int			fillit(t_data *data, int map_size)
@@ -69,7 +77,7 @@ int			fillit(t_data *data, int map_size)
 	map_len = map_size * map_size + map_size;
 	data->map = (char *)malloc((map_len + 1) * sizeof(char));
 	create_map(data->map, map_size, map_len, data->map_char);
-	if (find_correct_pattern(data, map_len))
+	if ((find_correct_pattern(data, map_len) == 1))
 	{
 		while (data->map[i])
 			write(1, &data->map[i++], 1);

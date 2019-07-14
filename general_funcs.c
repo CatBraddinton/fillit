@@ -41,11 +41,28 @@ void	free_list(t_tetr **tetriminos)
 	}
 }
 
-void	init_current_data(t_data *data)
+void	print_map(t_map *st_map)
 {
-	data->list_size = 0;
-	data->map_size = 0;
-	data->map_char = '.';
-	data->map_size = 0;
-	data->tetr_char = 'A';
+	int i;
+
+	i = 0;
+	while (i < st_map->map_size)
+	{
+		write(1, st_map->map[i], st_map->map_size);
+		write(1, "\n", 1);
+		i++;
+	}
+}
+
+void	free_map(t_map *st_map)
+{
+	int i;
+
+	i = 0;
+	while (i < st_map->map_size)
+	{
+		free(st_map->map[i]);
+		i++;
+	}
+	free(st_map->map);
 }

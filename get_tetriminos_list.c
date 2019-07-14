@@ -1,26 +1,41 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_tetriminos_list.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/11 08:10:23 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/11 08:11:42 by kdudko           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "fillit.h"
 
-static void	count_indexes(int *indexes, int *current_indexes)
+static void count_y_and_x(t_tetr *node, int block, int i)
 {
+	if (i == 1)
+	{
+		node->x_y[block].y = node->x_y[block - 1].y;
+		node->x_y[block].x = node->x_y[block - 1].x + 1;
+	}
+	else if (i == 3)
+	{
+		node->x_y[block].y = node->x_y[block - 1].y + 1;
+		node->x_y[block].x = node->x_y[block - 1].x - 2;
+	}
+	else if (i == 4)
+	{
+		node->x_y[block].y = node->x_y[block - 1].y + 1;
+		node->x_y[block].x = node->x_y[block - 1].x - 1;
+	}
+	else if (i == 5)
+	{
+		node->x_y[block].y = node->x_y[block - 1].y + 1;
+		node->x_y[block].x = node->x_y[block - 1].x;
+	}
+}
+
+static void	count_indexes(t_tetr *node, int *current_indexes)
+{
+	int i;
 	int block;
 
 	block = 1;
-	arr_zero(indexes);
+	node->x_y[0].y = 0;
+	node->x_y[0].x = 0;
 	while (block < BLOCKS)
 	{
-		indexes[block] = current_indexes[block] - current_indexes[block - 1];
+		i = current_indexes[block] - current_indexes[block - 1];
+		count_y_and_x(node, block, i);
 		block++;
 	}
 }
@@ -28,7 +43,6 @@ static void	count_indexes(int *indexes, int *current_indexes)
 static void	add_tetro_to_list(t_data *data, int *current_indexes)
 {
 	t_tetr *figure;
-	t_tetr *last_node;
 
 	if ((figure = (t_tetr *)malloc(sizeof(t_tetr))) == NULL)
 		error_case("error");
@@ -39,16 +53,15 @@ static void	add_tetro_to_list(t_data *data, int *current_indexes)
 	}
 	else if (data->head)
 	{
-		last_node = data->current;
-		figure->prev = last_node;
-		last_node->next = figure;
+		data->current->next = figure;
+		figure->prev = data->current;
 	}
 	figure->next = NULL;
 	data->list_size++;
 	figure->c = data->tetr_char;
 	data->tetr_char++;
 	data->current = figure;
-	count_indexes(figure->indexes, current_indexes);
+	count_indexes(figure, current_indexes);
 }
 
 static int	read_file(int fd, t_data *data)
@@ -61,7 +74,7 @@ static int	read_file(int fd, t_data *data)
 	buf[ret] = '\0';
 	if (ret == 0)
 	{
-		if (data->temp == data->list_size)
+		if (data->has_nl == data->list_size)
 			error_case("error");
 		return (1);
 	}
@@ -72,7 +85,7 @@ static int	read_file(int fd, t_data *data)
 	if (buf[TETRO_SQUARE - 1] != '\n')
 		error_case("error");
 	if (ret == TETRO_SQUARE + 1 && buf[ret - 1] == '\n')
-		data->temp++;
+		data->has_nl++;
 	first_check_nl_blocks(buf);
 	verify_tetrimino_is_valid(buf, current_indexes);
 	add_tetro_to_list(data, current_indexes);
@@ -87,6 +100,7 @@ int			get_tetriminos_list(t_data *data, char *filename)
 	tetriminos = NULL;
 	data->head = tetriminos;
 	data->current = tetriminos;
+	data->has_nl = 0;
 	if ((fd = open(filename, O_RDONLY)) == -1)
 		error_case("error");
 	if ((read_file(fd, data)) == -1)
