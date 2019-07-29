@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fillit.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/07/16 18:15:55 by kdudko            #+#    #+#             */
+/*   Updated: 2019/07/22 23:50:05 by kdudko           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fillit.h"
 
 int	check_if_fits(t_map *st_map, t_tetr *tetro, int y, int x)
@@ -11,70 +23,53 @@ int	check_if_fits(t_map *st_map, t_tetr *tetro, int y, int x)
 	{
 		i = y + tetro->x_y[block].y;
 		j = x + tetro->x_y[block].x;
-		if ((i >= 0 && i < st_map->map_size) && (j >= 0 && j < st_map->map_size) && 
-			st_map->map[i][j] == '.')
+		if ((i >= 0 && i < st_map->map_size) && (j >= 0 && j < st_map->map_size)
+			&& st_map->map[i][j] == '.')
 		{
 			tetro->fin_xy[block].y = i;
 			tetro->fin_xy[block].x = j;
 			block++;
-		}	
+		}
 		else
 			return (0);
 	}
-	return (change_map_state(tetro, st_map, tetro->c));
+	return (1);
 }
 
-int	put_tetriminos_on_map(t_tetr *tetro, t_map *st_map, int y, int x)
+int	find_correct_pattern(t_tetr *node, t_map *st_map, int y, int x)
 {
+	if (node == NULL)
+		return (0);
 	while (y < st_map->map_size)
 	{
 		while (x < st_map->map_size)
 		{
-			if (st_map->map[y][x] == st_map->map_char)
-				if (check_if_fits(st_map, tetro, y, x))
-					return (1);
+			if (check_if_fits(st_map, node, y, x))
+			{
+				change_map_state(node, st_map, node->c);
+				if (!find_correct_pattern(node->next, st_map, 0, 0))
+					return (0);
+				change_map_state(node, st_map, '.');
+			}
 			x++;
 		}
 		y++;
 		x = 0;
 	}
-	return (0);
+	return (1);
 }
 
-int	fillit(t_tetr *head, t_map *st_map, int map_size)
+int	fillit(t_tetr *head, t_map *st_map)
 {
-	t_tetr		*current;
-	int			y;
-	int			x;
-
-	if (!create_map(st_map, map_size, st_map->map_char))
-		return (0);
-	current = head;
-	y = 0;
-	x = 0;
-	while (current)
+	st_map->map_char = '.';
+	create_map(st_map, st_map->map_size, st_map->map_char);
+	while (find_correct_pattern(head, st_map, 0, 0))
 	{
-		if (!put_tetriminos_on_map(current, st_map, y, x))
-		{
-			if (current->prev)
-			{
-				current = current->prev;
-				change_map_state(current, st_map, st_map->map_char);
-				y = current->fin_xy[0].y;
-				x = current->fin_xy[0].x + 1;
-			}
-			else
-			{
-				free_map(st_map);
-				return (fillit(head, st_map, map_size + 1));
-			}
-		}
-		else
-		{
-			current = current->next;
-			y = 0;
-			x = 0;
-		}
+		free_map(st_map);
+		st_map->map_size++;
+		create_map(st_map, st_map->map_size, st_map->map_char);
 	}
+	print_map(st_map);
+	free_map(st_map);
 	return (1);
 }

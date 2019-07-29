@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/07/16 18:16:40 by kdudko            #+#    #+#             */
+/*   Updated: 2019/07/16 18:16:42 by kdudko           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fillit.h"
 
 int	min_map_size(int nb)
@@ -19,7 +31,7 @@ int	create_map(t_map *st_map, int size, char c)
 
 	i = 0;
 	st_map->map_size = size;
-	if ((st_map->map = (char **)malloc(size * sizeof(char *))) == NULL)
+	if ((st_map->map = (char **)malloc((size + 1) * sizeof(char *))) == NULL)
 		return (0);
 	while (i < size)
 	{
@@ -35,6 +47,7 @@ int	create_map(t_map *st_map, int size, char c)
 		st_map->map[i][j] = '\0';
 		i++;
 	}
+	st_map->map[size] = NULL;
 	return (1);
 }
 

@@ -5,30 +5,30 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/11 08:14:59 by kdudko            #+#    #+#             */
-/*   Updated: 2019/07/11 08:16:29 by kdudko           ###   ########.fr       */
+/*   Created: 2019/07/15 03:11:49 by kdudko            #+#    #+#             */
+/*   Updated: 2019/07/15 03:11:51 by kdudko           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-static int		check_connections(char const *buffer, int i)
+static int		check_connections(char const *buffer, int i, int ret)
 {
 	int neighbour;
 
 	neighbour = 0;
-	if (buffer[i + 1] == '#')
+	if (i + 1 >= 0 && i + 1 <= ret && buffer[i + 1] == '#')
 		neighbour++;
-	if (buffer[i + 5] == '#')
+	if (i + 5 >= 0 && i + 5 <= ret && buffer[i + 5] == '#')
 		neighbour++;
-	if (buffer[i - 1] == '#')
+	if (i - 1 >= 0 && i - 1 <= ret && buffer[i - 1] == '#')
 		neighbour++;
-	if (buffer[i - 5] == '#')
+	if (i - 5 >= 0 && i - 5 <= ret && buffer[i - 5] == '#')
 		neighbour++;
 	return (neighbour);
 }
 
-void			verify_tetrimino_is_valid(char const *buf, int *initial_indexes)
+void			tetro_is_valid(char const *buf, int *initial_indexes, int ret)
 {
 	int i;
 	int block;
@@ -42,14 +42,14 @@ void			verify_tetrimino_is_valid(char const *buf, int *initial_indexes)
 	{
 		if (buf[i] == '#')
 		{
+			connections += check_connections(buf, i, ret);
 			initial_indexes[block] = i;
-			connections += check_connections(buf, i);
 			block++;
 		}
 		i++;
 	}
-	if (connections < 6)
-		error_case("error");
+	if ((connections != 6) && (connections != 8))
+		error_case("is not tetrimino, wrong num of connectios\n");
 }
 
 void			first_check_nl_blocks(char const *buf)
@@ -65,18 +65,18 @@ void			first_check_nl_blocks(char const *buf)
 	while (buf[i] != '\0')
 	{
 		if ((buf[i] != '\n') && (buf[i] != '#') && (buf[i] != '.'))
-			error_case("error");
+			error_case("file contains wrong symbol\n");
 		if (buf[i] == '\n')
 		{
 			nl++;
 			temp = nl * NL_POS - 1;
 			if (temp < TETRO_SQUARE && i != temp)
-				error_case("error");
+				error_case("wrong tetro in file\n");
 		}
 		if (buf[i] == '#')
 			block++;
 		i++;
 	}
 	if (block != BLOCKS)
-		error_case("error");
+		error_case("wrong figure, blocks != 4");
 }

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_tetriminos_list.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/07/16 18:16:53 by kdudko            #+#    #+#             */
+/*   Updated: 2019/07/16 18:16:55 by kdudko           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fillit.h"
 
-static void count_y_and_x(t_tetr *node, int block, int i)
+static void	count_y_and_x(t_tetr *node, int block, int i)
 {
 	if (i == 1)
 	{
@@ -47,15 +59,9 @@ static void	add_tetro_to_list(t_data *data, int *current_indexes)
 	if ((figure = (t_tetr *)malloc(sizeof(t_tetr))) == NULL)
 		error_case("error");
 	if (data->head == NULL)
-	{
 		data->head = figure;
-		figure->prev = NULL;
-	}
 	else if (data->head)
-	{
 		data->current->next = figure;
-		figure->prev = data->current;
-	}
 	figure->next = NULL;
 	data->list_size++;
 	figure->c = data->tetr_char;
@@ -64,47 +70,53 @@ static void	add_tetro_to_list(t_data *data, int *current_indexes)
 	count_indexes(figure, current_indexes);
 }
 
-static int	read_file(int fd, t_data *data)
+static int	read_file(int fd, t_data *data, char *buf, int *current_indexes)
 {
-	char	buf[TETRO_SQUARE + 2];
 	int		ret;
-	int		current_indexes[BLOCKS];
 
 	ret = read(fd, buf, (TETRO_SQUARE + 1));
 	buf[ret] = '\0';
 	if (ret == 0)
 	{
 		if (data->has_nl == data->list_size)
-			error_case("error");
+			error_case("file has redundant \\ns\n");
 		return (1);
 	}
 	if (ret == -1)
 		return (-1);
 	if (data->list_size == MAX_TETRI_NUM)
-		error_case("error");
+		error_case("file contain more that 26 tetriminos\n");
 	if (buf[TETRO_SQUARE - 1] != '\n')
-		error_case("error");
+		error_case("no new line, wrong gile\n");
 	if (ret == TETRO_SQUARE + 1 && buf[ret - 1] == '\n')
 		data->has_nl++;
 	first_check_nl_blocks(buf);
-	verify_tetrimino_is_valid(buf, current_indexes);
+	tetro_is_valid(buf, current_indexes, ret);
 	add_tetro_to_list(data, current_indexes);
-	return (read_file(fd, data));
+	return (read_file(fd, data, buf, current_indexes));
 }
 
 int			get_tetriminos_list(t_data *data, char *filename)
 {
+	char	*buf;
 	int		fd;
 	t_tetr	*tetriminos;
+	int		*current_indexes;
 
 	tetriminos = NULL;
 	data->head = tetriminos;
 	data->current = tetriminos;
 	data->has_nl = 0;
 	if ((fd = open(filename, O_RDONLY)) == -1)
-		error_case("error");
-	if ((read_file(fd, data)) == -1)
-		error_case("error");
+		error_case("error opening the file\n");
+	if ((buf = (char *)malloc((TETRO_SQUARE + 2) * sizeof(char))) == NULL)
+		error_case("failed to allocate buf\n");
+	if ((current_indexes = (int *)malloc(BLOCKS * sizeof(int))) == NULL)
+		error_case("failed to allocate indexes arr\n");
+	if ((read_file(fd, data, buf, current_indexes)) == -1)
+		error_case("error while reading file\n");
 	close(fd);
+	free(buf);
+	free(current_indexes);
 	return (1);
 }

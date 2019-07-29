@@ -1,13 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   general_funcs.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kdudko <kdudko@student.unit.ua>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/07/22 23:38:51 by kdudko            #+#    #+#             */
+/*   Updated: 2019/07/22 23:45:30 by kdudko           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fillit.h"
 
-void	error_case(char const *str)
+void	error_case(char const *s)
 {
-	int i;
-
-	i = 0;
-	while (str[i])
-		write(1, &str[i++], 1);
-	write(1, "\n", 1);
+	(void)s;
+	write(1, "error\n", 6);
 	exit(EXIT_FAILURE);
 }
 
@@ -65,4 +73,5 @@ void	free_map(t_map *st_map)
 		i++;
 	}
 	free(st_map->map);
+	st_map->map = NULL;
 }
